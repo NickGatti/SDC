@@ -1,0 +1,26 @@
+1. Created a github organization
+2. Set up directories
+3. Set up git workflow
+4. Set up AirBnB style guide and eslint + prettier
+5. Connect and set up a new CircleCI build
+6. Clone repo's
+7. Set up dependencies
+8. Create tickets
+9. Set up faker
+10. Choose 2 dbs
+11. Choose 2 ORMs
+
+================================
+
+We chose postgreSQL for our SQL database because it has the best performance under high loads.
+
+We chose CouchDB for our NoSQL database because of its ease use and the protocol is http based.
+It is document based and has good performance.
+
+================================
+
+Export postgreSQL pg_dump -U username dbname -N topology -T spatial_ref_sys > dbexport.pgsql
+Import postgreSQL psql -U username dbname < dbexport.pgsql
+
+Import couchDB cat myFile.json | lwp-request -m POST -sS "http://localhost/dbname/_bulk_docs" -c "application/json"
+or cat myFile.json | POST -sS "http://myDB.couchone.com/testDB" -c "application/json"
