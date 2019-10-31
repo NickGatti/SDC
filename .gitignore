@@ -3,3 +3,5 @@
 node_modules\
 **\formSeedData.csv
 formSeedData.csv
+**\formSeedData.json
+formSeedData.json
