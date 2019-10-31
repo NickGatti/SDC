@@ -1,28 +1,30 @@
 //psql -f schema.sql -U nick formservice
 //COPY zip_codes FROM '/path/to/csv/ZIP_CODES.txt' WITH (FORMAT csv);
 
-const startTime = new Date().getMilliseconds();
+const startTime = new Date().getTime();
 
 const fs = require('fs');
 const faker = require('faker');
-const { client } = require('pg');
-
-const writeStream = fs.createWriteStream('formSeedData.csv', { flags: 'w' });
-const client = new Client({
-    user: "nick",
-    host: "localhost",
-    database: "formservice"
-})
-client.connect();
+const path = require('path');
+const { Client } = require('pg');
 
 const agentTypes = ['listing', 'premier'];
 
-(async () => {
+const CSVPath = path.join(__dirname, 'formSeedData.csv');
+
+const postgres = new Client({
+    user: "nick",
+    host: "localhost",
+    database: "formservice"
+});
+postgres.connect();
+
+const generateData = async () => {
     writeStream.write('id,agent_name,recent_sales,phone,agent_type,average_stars,num_ratings,agent_photo\n');
     for (let i = 1; i <= 10000000; i++) {
         const name = faker.name.firstName() + ' ' + faker.name.lastName();
         const sales = faker.random.number({ min: 0, max: 30 });
-        const phone = faker.phone.phoneNumber();
+        const phone = faker.phone.phoneNumber('###-###-####');
         const type = agentTypes[faker.random.number({ min: 0, max: 1 })];
         const stars = faker.random.number({ min: 0, max: 5 });
         const ratings = faker.random.number({ min: 0, max: 500 });
@@ -31,14 +33,46 @@ const agentTypes = ['listing', 'premier'];
             await new Promise(resolve => writeStream.once('drain', resolve));
         };
     };
-    const endTime = new Date().getMilliseconds()
-    console.log('Done! Took', endTime - startTime, 'milliseconds.')
-})();
+    postgres.query(`copy agents(id,agent_name,recent_sales,phone,agent_type,average_stars,num_ratings,agent_photo) FROM '${CSVPath}' DELIMITER ',' CSV HEADER;`, (err, res) => {
+        if (err) {
+            console.log('CSV Import error:', err);
+        } else {
+            const endTime = new Date().getTime()
+            console.log('Done! Took', endTime - startTime, 'milliseconds.');
+            console.log('Successfully imported CSV into table!');
+        };
+        postgres.end();
+    });
+};
 
-client.query(`agents FROM './formSeedData.csv' WITH (FORMAT csv);`, (err, res) => {
-    if (err) {
-        console.log(err)
+fs.access(CSVPath, accessErr => {
+    console.log('Trying to access file...');
+    if (accessErr) {
+        console.log('File not accessed!')
+        if (accessErr.errno === -2) {
+            console.log('File doesnt exist, generating data...');
+            writeStream = fs.createWriteStream('formSeedData.csv', { flags: 'w' });
+            generateData();
+            return;
+        } else {
+            console.log('access error', accessErr);
+            postgres.end();
+            return;
+        };
     } else {
-        console.log('Successfully imported CSV into table!')
-    }
-})
+        console.log('File accessed!');
+        fs.unlink(CSVPath, unlinkErr => {
+            console.log('Unlinking file...')
+            if (unlinkErr) {
+                console.log('unlink error', unlinkErr);
+                postgres.end();
+                return;
+            } else {
+                console.log('File unlinked! Generating data...');
+                writeStream = fs.createWriteStream('formSeedData.csv', { flags: 'w' });
+                generateData();
+                return;
+            };
+        });
+    };
+});
