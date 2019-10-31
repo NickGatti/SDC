@@ -5,7 +5,6 @@ const startTime = new Date().getTime()
 const fs = require('fs');
 const faker = require('faker');
 const path = require('path');
-const axios = require('axios');
 
 const agentTypes = ['listing', 'premier'];
 
@@ -13,7 +12,7 @@ const JSONPath = path.join(__dirname, 'formSeedData.json');
 
 const generateData = async () => {
     writeStream.write(`{"agents":[`)
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 10000000; i++) {
         const name = faker.name.firstName() + ' ' + faker.name.lastName();
         const sales = faker.random.number({ min: 0, max: 30 });
         const phone = faker.phone.phoneNumber('###-###-####');
