@@ -40,7 +40,6 @@ fs.access(JSONPath, accessErr => {
             return;
         } else {
             console.log('access error', accessErr);
-            postgres.end();
             return;
         };
     } else {
@@ -49,7 +48,6 @@ fs.access(JSONPath, accessErr => {
             console.log('Unlinking file...')
             if (unlinkErr) {
                 console.log('unlink error', unlinkErr);
-                postgres.end();
                 return;
             } else {
                 console.log('File unlinked! Generating data...');

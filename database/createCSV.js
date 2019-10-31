@@ -38,7 +38,7 @@ const generateData = async () => {
             console.log('CSV Import error:', err);
         } else {
             const endTime = new Date().getTime()
-            console.log('Done! Took', endTime - startTime, 'milliseconds.');
+            console.log('Done! Took', (endTime - startTime) / 1000, 'seconds.');
             console.log('Successfully imported CSV into table!');
         };
         postgres.end();
