@@ -11,8 +11,8 @@ const agentTypes = ['listing', 'premier'];
 const JSONPath = path.join(__dirname, 'formSeedData.json');
 
 const generateData = async () => {
-    writeStream.write(`{"agents":[`)
-    for (let i = 1; i <= 10000000; i++) {
+    writeStream.write(`{\n"docs":[\n`)
+    for (let i = 1; i <= 1000; i++) {
         const name = faker.name.firstName() + ' ' + faker.name.lastName();
         const sales = faker.random.number({ min: 0, max: 30 });
         const phone = faker.phone.phoneNumber('###-###-####');
@@ -20,11 +20,11 @@ const generateData = async () => {
         const stars = faker.random.number({ min: 0, max: 5 });
         const ratings = faker.random.number({ min: 0, max: 500 });
         const photo = `https://picsum.photos/id/${faker.random.number({ min: 1, max: 1000 })}/200/300`;
-        if (!writeStream.write(`${i > 1 ? ',' : ''}{"agent_name":"${name}","recent_sales":${sales},"phone":"${phone}","agent_type":"${type}","average_stars":${stars},"num_ratings":${ratings},"agent_photo":"${photo}"}`)) {
+        if (!writeStream.write(`${i > 1 ? ',\n' : ''}{"id":${i},"agent_name":"${name}","recent_sales":${sales},"phone":"${phone}","agent_type":"${type}","average_stars":${stars},"num_ratings":${ratings},"agent_photo":"${photo}"}`)) {
             await new Promise(resolve => writeStream.once('drain', resolve));
         };
     };
-    writeStream.write(`]}`)
+    writeStream.write(`]\n}\n`)
     const endTime = new Date().getTime()
     console.log('Done! Took', (endTime - startTime) / 10000, 'seconds.');
 };
