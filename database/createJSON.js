@@ -12,7 +12,7 @@ const JSONPath = path.join(__dirname, 'formSeedData.json');
 
 const generateData = async () => {
     writeStream.write(`{\n"docs":[\n`)
-    for (let i = 1; i <= 1000; i++) {
+    for (let i = 1; i <= 10; i++) {
         const name = faker.name.firstName() + ' ' + faker.name.lastName();
         const sales = faker.random.number({ min: 0, max: 30 });
         const phone = faker.phone.phoneNumber('###-###-####');
