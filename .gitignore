@@ -1,7 +1,11 @@
 **\node_modules
 **\node_modules\
 node_modules\
-**\formSeedData.csv
-formSeedData.csv
-**\formSeedData.json
-formSeedData.json
+**\CSVForCouch.csv
+CSVForCouch.csv
+**\CSVForPsql.csv
+CSVForPsql.csv
+**\*.csv
+*.csv
+**\**.csv
+**.csv

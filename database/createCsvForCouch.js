@@ -8,11 +8,11 @@ const path = require('path');
 
 const agentTypes = ['listing', 'premier'];
 
-const JSONPath = path.join(__dirname, 'formSeedData.json');
+const CSVPath = path.join(__dirname, 'CSVForCouch.csv');
 
 const generateData = async () => {
-    writeStream.write(`{\n"docs":[\n`)
-    for (let i = 1; i <= 10; i++) {
+    writeStream.write('id,agent_name,recent_sales,phone,agent_type,average_stars,num_ratings,agent_photo\n');
+    for (let i = 1; i <= 10000000; i++) {
         const name = faker.name.firstName() + ' ' + faker.name.lastName();
         const sales = faker.random.number({ min: 0, max: 30 });
         const phone = faker.phone.phoneNumber('###-###-####');
@@ -20,22 +20,21 @@ const generateData = async () => {
         const stars = faker.random.number({ min: 0, max: 5 });
         const ratings = faker.random.number({ min: 0, max: 500 });
         const photo = `https://picsum.photos/id/${faker.random.number({ min: 1, max: 1000 })}/200/300`;
-        if (!writeStream.write(`${i > 1 ? ',\n' : ''}{"id":${i},"agent_name":"${name}","recent_sales":${sales},"phone":"${phone}","agent_type":"${type}","average_stars":${stars},"num_ratings":${ratings},"agent_photo":"${photo}"}`)) {
+        if (!writeStream.write(`${i},${name},${sales},${phone},${type},${stars},${ratings},${photo}\n`)) {
             await new Promise(resolve => writeStream.once('drain', resolve));
         };
     };
-    writeStream.write(`]\n}\n`)
     const endTime = new Date().getTime()
     console.log('Done! Took', (endTime - startTime) / 10000, 'seconds.');
 };
 
-fs.access(JSONPath, accessErr => {
+fs.access(CSVPath, accessErr => {
     console.log('Trying to access file...');
     if (accessErr) {
         console.log('File not accessed!')
         if (accessErr.errno === -2) {
             console.log('File doesnt exist, generating data...');
-            writeStream = fs.createWriteStream(JSONPath, { flags: 'w' });
+            writeStream = fs.createWriteStream(CSVPath, { flags: 'w' });
             generateData();
             return;
         } else {
@@ -44,14 +43,14 @@ fs.access(JSONPath, accessErr => {
         };
     } else {
         console.log('File accessed!');
-        fs.unlink(JSONPath, unlinkErr => {
+        fs.unlink(CSVPath, unlinkErr => {
             console.log('Unlinking file...')
             if (unlinkErr) {
                 console.log('unlink error', unlinkErr);
                 return;
             } else {
                 console.log('File unlinked! Generating data...');
-                writeStream = fs.createWriteStream(JSONPath, { flags: 'w' });
+                writeStream = fs.createWriteStream(CSVPath, { flags: 'w' });
                 generateData();
                 return;
             };

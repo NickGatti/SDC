@@ -1,12 +1,12 @@
-1. Created a github organization
-2. Set up directories
-3. Set up git workflow
-4. Set up AirBnB style guide and eslint + prettier
-5. Connect and set up a new CircleCI build
-6. Clone repo's
-7. Set up dependencies
-8. Create tickets
-9. Set up faker
+1. Created a github organization CHECK!
+2. Set up directories CHECK!
+3. Set up git workflow CHECK!
+4. Set up AirBnB style guide and eslint + prettier UNCHECK!
+5. Connect and set up a new CircleCI build CHECK!
+6. Clone repo's CHECK!
+7. Set up dependencies CHECK!
+8. Create tickets CHECK!
+9. Set up faker CHECK!
 10. Choose 2 dbs
 11. Choose 2 ORMs
 
