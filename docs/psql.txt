@@ -1,0 +1,79 @@
+~/Documents/workspace/School-Related/SDC/database/benchmarks(master) » node benchmarkPSQL.js                                                                                                                           nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 5630.72ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 operations.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database/benchmarks(master) » node benchmarkPSQL.js                                                                                                                           nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 3341.52ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 operations.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database/benchmarks(master) » node benchmarkPSQL.js                                                                                                                           nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 1897.25ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 operations.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database/benchmarks(master) » node benchmarkPSQL.js                                                                                                                           nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 990.71ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 operations.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database/benchmarks(master) » node benchmarkPSQL.js                                                                                                                           nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 200.88ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 operations.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database/benchmarks(master) » node benchmarkPSQL.js                                                                                                                           nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 27.79ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 operations.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database/benchmarks(master) » node benchmarkPSQL.js                                                                                                                           nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 5.26ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 operations.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database/benchmarks(master) » node benchmarkPSQL.js                                                                                                                           nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 5.50ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 operations.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database(master*) » node benchmarks/benchmarkPSQL.js                                                                                                                          nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 0.81ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 20000 read operations. With 0 errors. At a 1ms interval.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database(master*) » node benchmarks/benchmarkPSQL.js                                                                                                                          nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 0.89ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 10000 read operations. With 0 errors. At a 1ms interval.

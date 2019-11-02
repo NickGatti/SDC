@@ -1,9 +1,10 @@
 const axios = require('axios')
 
 const marks = {
-    operations: 10000,
+    operations: 500,
     interval: 1,
     type: 'read',
+    errors: 0,
     pollIncrement: this.type === 'all' ? 4 : this.type === 'non-read' ? 3 : 1,
     c: {
         start: [],
@@ -88,15 +89,27 @@ function queryDB() {
                                         }
                                     })
                                     .catch(err => {
-                                        console.log('Delete error!', err)
+                                        marks.errors++
+                                        counter++
+                                        if (counter === marks.operations * marks.pollIncrement) {
+                                            tallyResults()
+                                        }
                                     })
                             })
                             .catch(err => {
-                                console.log('Update error!')
+                                marks.errors++
+                                counter++
+                                if (counter === marks.operations * marks.pollIncrement) {
+                                    tallyResults()
+                                }
                             })
                     })
                     .catch(err => {
-                        console.log('Create error!')
+                        marks.errors++
+                        counter++
+                        if (counter === marks.operations * marks.pollIncrement) {
+                            tallyResults()
+                        }
                     })
             }
             if (marks.type === 'read' || marks.type === 'all') {
@@ -118,7 +131,11 @@ function queryDB() {
                         }
                     })
                     .catch(err => {
-                        console.log('Read error!', err)
+                        marks.errors++
+                        counter++
+                        if (counter === marks.operations * marks.pollIncrement) {
+                            tallyResults()
+                        }
                     })
             }
         }, marks.interval * i)
@@ -131,8 +148,8 @@ function tallyResults() {
         marks.r.avg = ((marks.r.end.reduce((acc, cur) => acc + cur, 0) / marks.operations) - (marks.r.start.reduce((acc, cur) => acc + cur, 0) / marks.operations))
         marks.u.avg = ((marks.u.end.reduce((acc, cur) => acc + cur, 0) / marks.operations) - (marks.u.start.reduce((acc, cur) => acc + cur, 0) / marks.operations))
         marks.d.avg = ((marks.d.end.reduce((acc, cur) => acc + cur, 0) / marks.operations) - (marks.d.start.reduce((acc, cur) => acc + cur, 0) / marks.operations))
-        console.log(`Benchmark results:\nCreate average: ${marks.c.avg.toFixed(2)}ms\nRead average: ${marks.r.avg.toFixed(2)}ms\nUpdate average: ${marks.u.avg.toFixed(2)}ms\nDelete average: ${marks.d.avg.toFixed(2)}ms\nOut of ${marks.operations} operations.`)
-    }, 25 * marks.operations)
+        console.log(`Benchmark results:\nCreate average: ${marks.c.avg.toFixed(2)}ms\nRead average: ${marks.r.avg.toFixed(2)}ms\nUpdate average: ${marks.u.avg.toFixed(2)}ms\nDelete average: ${marks.d.avg.toFixed(2)}ms\nOut of ${marks.operations} ${marks.type} operations. With ${marks.errors} errors. At a ${marks.interval}ms interval.`)
+    }, marks.interval * marks.operations)
 }
 
 queryDB()

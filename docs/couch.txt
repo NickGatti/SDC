@@ -1,0 +1,23 @@
+~/Documents/workspace/School-Related/SDC/database(master*) » node benchmarks/benchmarkCDB.js      nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: -3145313124.10ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 2000 read operations. With 4 errors. At a 1ms interval.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database(master*) » node benchmarks/benchmarkCDB.js      nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: -652653664116.89ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 4000 read operations. With 1660 errors. At a 1ms interval.
+------------------------------------------------------------
+~/Documents/workspace/School-Related/SDC/database(master*) » node benchmarks/benchmarkCDB.js      nick@nicks-MacBook-Air
+Benchmark results:
+Create average: 0.00ms
+Read average: 1634.78ms
+Update average: 0.00ms
+Delete average: 0.00ms
+Out of 500 read operations. With 0 errors. At a 1ms interval.
