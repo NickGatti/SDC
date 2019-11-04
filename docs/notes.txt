@@ -26,8 +26,8 @@ Import couchDB cat myFile.json | lwp-request -m POST -sS "http://localhost/dbnam
 or cat myFile.json | POST -sS "http://myDB.couchone.com/testDB" -c "application/json"
 
 CouchDB wasnt even close to being able to handle as many requests as psql.
-CouchDB had much more errors.
-CouchDB was able to respond fast but to few fewer requests than CouchDB
+CouchDB had many more errors.
+CouchDB was able to respond fast but to few fewer requests than postgres
 PSQL's response time is very good.
 PSQL is able to handle a much higher load.
-PSQL had no errors while CouchDB was having bad errors.
+PSQL had no errors while CouchDB was having many errors.
