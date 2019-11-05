@@ -27,8 +27,9 @@ const generateData = async () => {
         const phone = faker.phone.phoneNumber('###-###-####');
         const type = agentTypes[faker.random.number({ min: 0, max: 1 })];
         const stars = faker.random.number({ min: 0, max: 5 });
+        //https://s3-us-west-2.amazonaws.com/agents-zallo/Realtor100.jpg
         const ratings = faker.random.number({ min: 0, max: 500 });
-        const photo = `https://picsum.photos/id/${faker.random.number({ min: 1, max: 1000 })}/200/300`;
+        const photo = `https://s3-us-west-2.amazonaws.com/agents-zallo/Realtor${faker.random.number({ min: 1, max: 1000 })}.jpg`;
         if (!writeStream.write(`${name},${sales},${phone},${type},${stars},${ratings},${photo}\n`)) {
             await new Promise(resolve => writeStream.once('drain', resolve));
         };
