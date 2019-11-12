@@ -1,3 +1,46 @@
+redis:
+
+sudo yum update
+
+cd ~
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.1/install.sh | bash
+exec bash
+nvm install node
+sudo yum install git
+exec bash
+git clone https://github.com/Zalloz/form-service.git
+
+cd ~
+sudo yum -y install gcc make # install GCC compiler
+cd /usr/local/src
+sudo wget http://download.redis.io/redis-stable.tar.gz
+sudo tar xvzf redis-stable.tar.gz
+sudo rm -f redis-stable.tar.gz
+cd redis-stable
+sudo make distclean
+sudo make
+sudo yum install -y tcl
+sudo make test
+sudo cp src/redis-server /usr/local/bin/
+sudo cp src/redis-cli /usr/local/bin/
+cd /usr/local/src/redis-stable
+sudo cp ~/form-service/redis.conf /etc/redis.conf
+sudo vim /etc/redis.conf
+sudo /usr/local/bin/redis-server /etc/redis.conf --daemonize yes
+
+
+sudo su
+sudo echo never > /sys/kernel/mm/transparent_hugepage/enabled
+sudo sysctl vm.overcommit_memory=1
+sysctl -w net.core.somaxconn=1024
+sudo sysctl -w fs.file-max=100032
+sysctl -p
+
+1106000 successes
+1393854 unset keys.
+
+my redis doesnt store all the data, going to shard it into 3
+
 1. Created a github organization CHECK!
 2. Set up directories CHECK!
 3. Set up git workflow CHECK!
@@ -9,6 +52,16 @@
 9. Set up faker CHECK!
 10. Choose 2 dbs
 11. Choose 2 ORMs
+
+AWS:
+https://www.linode.com/docs/databases/postgresql/how-to-install-postgresql-relational-databases-on-centos-7/
+https://www.hostinger.com/tutorials/how-to-install-postgresql-on-centos-7/
+https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c
+https://enterprise.arcgis.com/en/server/10.3/cloud/amazon/change-default-database-passwords-on-linux.htm
+https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
+https://stackoverflow.com/questions/18664074/getting-error-peer-authentication-failed-for-user-postgres-when-trying-to-ge
+https://www.linode.com/docs/tools-reference/tools/modify-file-permissions-with-chmod/
+https://stackoverflow.com/questions/19463074/postgres-error-could-not-open-file-for-reading-permission-denied
 
 ================================
 
@@ -31,3 +84,79 @@ CouchDB was able to respond fast but to few fewer requests than postgres
 PSQL's response time is very good.
 PSQL is able to handle a much higher load.
 PSQL had no errors while CouchDB was having many errors.
+
+I decided to make a bare node server without express off the bat because
+i thought id end up doing it anyways and decided to not waste extra work.
+
+With the first loader.io test i got around 100 per second at 1800ms avg res time
+
+Then i refactored my proxy to use a promise.all and the avg res time when down to
+1500ms
+
+my max was 120 RPS at 2023ms
+
+michel refactored, changed to bare node and we got almost no improvement.
+
+still 120 RPS at around 2000ms
+
+mike then refactored to promise.all and we saw a very slight improvement
+
+still 120 RPS at around 2000ms
+
+mike then refactored to only use 4 db queries each time and we got about 10 more RPS more.
+
+improvment to 130 RPS at around 2000ms
+
+we both made our production builds and there was no improvement
+
+130 RPS at around 2000ms
+
+now we are trying new relic
+
+tried to reduce our sql max varchar count for each variable which didnt improve any performace
+
+going to try to find out what our bottleneck is think its the db
+
+first we will try using redis
+we got redis working got 2350 ms on first run
+then after several runs of loader got to 1900ms
+then fixed some code error and made optomization then got 1757 ms on 125 clients 
+
+fixed the warnings on redis about over commit memory, huge page setting and some others
+
+set some configs on redis
+
+but over all these havent seem to have changed anything because our redis cache isnt fully populated
+
+we changed the code a bit so our node servers send a response right after a postgres query
+if the cache key in redis wasnt found instead of waiting for redis to reply for its set query
+to send back a server response
+
+changed the redis no-appendfsync-on-rewrite to yes and got a small improvment, but noticable
+
+making a few postgres server have to do this:
+[ec2-user@ip-172-31-37-128 database]$ chmod a+rX /home/ec2-user/
+[ec2-user@ip-172-31-37-128 database]$ chmod a+rX /home/ec2-user/form-service/
+[ec2-user@ip-172-31-37-128 database]$ chmod a+rX /home/ec2-user/form-service/server/
+[ec2-user@ip-172-31-37-128 database]$ chmod a+rX /home/ec2-user/form-service/server/da
+chmod: cannot access ‘/home/ec2-user/form-service/server/da’: No such file or directory
+[ec2-user@ip-172-31-37-128 database]$ chmod a+rX /home/ec2-user/form-service/server/database/
+[ec2-user@ip-172-31-37-128 database]$ chmod a+rX /home/ec2-user/form-service/server/database/schema.sql 
+[ec2-user@ip-172-31-37-128 database]$ sudo -u postgres psql -f schema.sql
+
+to import data
+
+had to change the pg_hba.conf
+
+had to change the sudo vim /var/lib/pgsql/data/postgresql.conf
+
+on line 32 to listen_addresses = '*' 
+
+changed shared buffers in sudo vim /var/lib/pgsql/data/postgresql.conf from 32MB to 128MB, huge boost
+
+made them higher 512 shared 384 for temp and got another boost
+
+found out lodader.io behaves weird when you put in less than 250 cps
+the amount of cps under 250 varies alot and if you put in 250 it goes to 500 cps
+
+so we are under 2secs at 500 rps
