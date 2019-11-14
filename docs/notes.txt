@@ -1,3 +1,33 @@
+form service install:
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.1/install.sh | bash
+exec bash
+nvm install node
+sudo yum install git
+git clone https://github.com/Zalloz/form-service.git
+cd form-service
+npm i
+sudo visudo #change settings: comment out line #Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
+sudo ln -s /usr/local/bin/node /usr/bin/node
+sudo ln -s /usr/local/lib/node /usr/lib/node
+sudo ln -s /usr/local/bin/npm /usr/bin/npm
+sudo ln -s /usr/local/bin/node-waf /usr/bin/node-waf
+sudo node server/dist/server.js
+
+nginx:
+install 1: sudo yum install epel-release
+install 2: sudo yum update
+install 3: sudo amazon-linux-extras install nginx1
+see if its running: sudo fuser -k 80/tcp
+stop it: sudo systemctl stop nginx.service
+start it: sudo systemctl start nginx.service
+edit config: sudo vim /etc/nginx/nginx.conf
+
+for others:
+sudo yum install epel-release
+sudo yum update
+sudo yum install nginx
+sudo nginx -v
+
 redis:
 
 sudo yum update
