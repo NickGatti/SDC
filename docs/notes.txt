@@ -22,16 +22,16 @@ stop it: sudo systemctl stop nginx.service
 start it: sudo systemctl start nginx.service
 edit config: sudo vim /etc/nginx/nginx.conf
 
-sudo vi /etc/sysctl.conf
+sudo vim /etc/sysctl.conf
 Append / modify the following line:
-fs.file-max = 7000000
+fs.file-max = 70000000
 Save and close the file. Edit /etc/security/limits.conf, enter:
-# vi /etc/security/limits.conf
+sudo vim /etc/security/limits.conf
 
 Set soft and hard limit for all users or nginx user as follows:
 
-ec2-user           soft    nofile  1000000
-ec2-user           hard    nofile  3000000
+ec2-user           soft    nofile  10000000
+ec2-user           hard    nofile  30000000
 
 nginx       soft    nofile  10000
 nginx       hard    nofile  30000
