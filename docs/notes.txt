@@ -14,7 +14,7 @@ sudo ln -s /usr/local/bin/node-waf /usr/bin/node-waf
 sudo node server/dist/server.js
 
 nginx:
-install 1: sudo yum install epel-release
+install 1: sudo amazon-linux-extras install epel
 install 2: sudo yum update
 install 3: sudo amazon-linux-extras install nginx1
 see if its running: sudo fuser -k 80/tcp
@@ -24,14 +24,14 @@ edit config: sudo vim /etc/nginx/nginx.conf
 
 sudo vim /etc/sysctl.conf
 Append / modify the following line:
-fs.file-max = 70000000
+fs.file-max = 65535
 Save and close the file. Edit /etc/security/limits.conf, enter:
 sudo vim /etc/security/limits.conf
 
 Set soft and hard limit for all users or nginx user as follows:
 
-ec2-user           soft    nofile  10000000
-ec2-user           hard    nofile  30000000
+ec2-user           soft    nofile  65535
+ec2-user           hard    nofile  65535
 
 nginx       soft    nofile  10000
 nginx       hard    nofile  30000
@@ -206,4 +206,28 @@ made them higher 512 shared 384 for temp and got another boost
 found out lodader.io behaves weird when you put in less than 250 cps
 the amount of cps under 250 varies alot and if you put in 250 it goes to 500 cps
 
-so we are under 2secs at 500 rps
+so we are under 2secs at 250 rps
+
+counldnt find much gain from changing more config in either redis or postgres
+decided that using redis shards to cache my all the data i would use would be better.
+
+made 3 redis shards and got another 50 rps out of it.
+
+so decided to scale more, made 10 total redis shards and got up to around 400 rps
+
+then looked at my service cpu usage and it was maxed out 
+
+so made nginx load balance 3 services that all talk to the 10 shards and got to 1000 rps immediately
+
+i got a lot of errors but fixed them by increasing ulimits and settings in nginx conf 
+
+1000 rps 1800ms
+
+still my services are using a lot of cpu, will open 3 more
+
+really good results, got 19 ms on 1000 rps no errors
+
+1500 rps at 100 ms
+2000 rps at 2k ms 5.1% error rate
+
+servers do well at high loads until they get to about 60,000 total responses, then errors occur.
