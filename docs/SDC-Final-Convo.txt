@@ -1,0 +1,23 @@
+I was responsible for building and scaling a service in 3 weeks.
+
+The major problems I faced were finding and uncapping bottlenecks
+
+Postgres turned out to be the first major one, at 100 requests per second.
+
+Postgres has some tuning that can make it work faster, so I tweaked it which resulted
+in a minor improvement. About 15 requests per second better.
+
+Postgres was still the problem.
+
+Scaling postgres didnt seem as fruitful as using a caching system like redis.
+
+So instead of scaling Postgres, I decided to cache all the data on
+Redis shards which are much faster. Which resulted in a major improvement in
+the load capacity. It went from about 115 rps to around 250.
+
+The next big bottleneck were the node services.
+
+I decided to use ngingx to load balance multiple node services which resulted in a huge
+improvement, going from 250 rps to over 1400.
+
+Scaling beyond that required more money so I stopped there.

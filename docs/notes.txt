@@ -4,6 +4,7 @@ exec bash
 nvm install node
 sudo yum install git
 git clone https://github.com/Zalloz/form-service.git
+git clone https://github.com/Zalloz/form-proxy.git
 cd form-service
 npm i
 sudo visudo #change settings: comment out line #Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
