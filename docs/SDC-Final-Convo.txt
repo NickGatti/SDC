@@ -1,10 +1,10 @@
-I was responsible for building and scaling a service in 3 weeks.
+I was responsible for building, deploying and scaling a service in 3 weeks.
 
 The major problems I faced were finding and uncapping bottlenecks
 
 Postgres turned out to be the first major one, at 100 requests per second.
 
-Postgres has some tuning that can make it work faster, so I tweaked it which resulted
+Postgres has some settings that can make it work faster, so I tweaked them which resulted
 in a minor improvement. About 15 requests per second better.
 
 Postgres was still the problem.
@@ -20,4 +20,4 @@ The next big bottleneck were the node services.
 I decided to use ngingx to load balance multiple node services which resulted in a huge
 improvement, going from 250 rps to over 1400.
 
-Scaling beyond that required more money so I stopped there.
+Going beyond that required vertical scaling so I stopped there.
